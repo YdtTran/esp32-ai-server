@@ -1,0 +1,43 @@
+# Used by compose.local-voice.yaml. All inference endpoints are local.
+server:
+  websocket: ws://10.127.9.237:8000/xiaozhi/v1/
+
+prompt_template: config/local-voice-prompt.txt
+enable_wakeup_words_response_cache: false
+enable_greeting: false
+
+selected_module:
+  ASR: SpeachesASR
+  LLM: OllamaLLM
+  TTS: PiperTTS
+  Memory: nomem
+  Intent: nointent
+
+ASR:
+  SpeachesASR:
+    type: openai
+    api_key: local-speaches
+    base_url: http://speaches:8000/v1/audio/transcriptions
+    model_name: Systran/faster-distil-whisper-small.en
+    output_dir: tmp/
+
+LLM:
+  OllamaLLM:
+    type: ollama
+    model_name: qwen3:1.7b
+    base_url: http://ollama:11434
+
+TTS:
+  PiperTTS:
+    type: piper
+    language: English
+    url: http://piper:5000
+    output_dir: tmp/
+    tts_timeout: 60
+
+prompt: |
+  You are Xiaozhi, a friendly voice assistant. Respond in concise, natural English.
+  Use plain spoken text without Markdown. Keep replies to a few sentences.
+  Do not claim to browse the web or control devices.
+end_prompt:
+  enable: false
